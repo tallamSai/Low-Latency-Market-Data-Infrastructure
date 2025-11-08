@@ -1,0 +1,40 @@
+LOW-LATENCY MARKET DATA INFRASTRUCTURE — PROJECT DOSSIER
+
+PROBLEM STATEMENT
+High-rate market data must be ingested, processed, stored, and observed without
+unbounded memory growth, unexplained latency, or unreproducible failures.
+
+OBJECTIVES AND SOLUTION
+MarketPulse is a C++20 infrastructure platform for asynchronous ingestion,
+bounded concurrent pipelines, persistent event recording, deterministic replay,
+backpressure, and operational telemetry. It separates network I/O, processing,
+persistence, replay, and monitoring so each layer can be tested and evolved
+without changing the event contract for downstream consumers.
+
+METHODOLOGY
+1. Receive and normalize streaming events asynchronously.
+2. Transfer events through bounded queues so overload creates controlled
+   backpressure rather than memory exhaustion.
+3. Persist accepted events for durable audit and replay.
+4. Re-run recorded streams through the same pipeline to reproduce incidents.
+5. Measure throughput, stage latency, and queue pressure with benchmarks and
+   Prometheus/Grafana-compatible telemetry.
+
+RESULTS AND ACHIEVEMENTS
+The repository provides C++20 source, CMake build configuration, data-flow and
+architecture documentation, benchmark code, recording/replay functionality,
+configuration assets, and operational monitoring infrastructure. Benchmark
+numbers are intentionally workload- and hardware-specific: valid reports must
+state CPU, compiler mode, feed shape, queue capacity, and latency percentile.
+
+TECH STACK
+C++20; CMake; vcpkg; Docker; asynchronous networking; concurrent queues;
+Prometheus; Grafana; durable storage and replay tooling.
+
+RUN AND TEST
+Install CMake and a C++20 compiler, then run:
+  cmake -S . -B build
+  cmake --build build --config Release
+  ctest --test-dir build --output-on-failure -C Release
+Use the documented benchmark targets after a Release build. This is market-data
+infrastructure, not investment advice or a trading strategy.
